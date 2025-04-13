@@ -34,16 +34,18 @@ protected:
     virtual void show_info() const = 0;
     
     /**
+     * @brief Constructor protegido para evitar instanciar la interfaz directamente.
+     */
+    IArma(){}
+    
+public: 
+    /**
      * @brief Indica si el arma es mágica.
      * @return true si el arma es mágica, false en caso contrario.
      */
     virtual bool isMagical() const = 0;
 
-    /**
-     * @brief Constructor protegido para evitar instanciar la interfaz directamente.
-     */
-    IArma(){}
-    
+
     /**
      * @brief Destructor virtual por defecto.
      */
