@@ -24,6 +24,12 @@ enum powerLevels {COMMON = 1, RARE, EPIC};
 class IArma{
 protected:
     /**
+     * @brief Constructor protegido para evitar instanciar la interfaz directamente.
+     */
+    IArma(){}
+    
+public:
+    /**
      * @brief Usa el arma y cambia su estado interno.
      */
     virtual void use() = 0;
@@ -32,13 +38,10 @@ protected:
      * @brief Muestra la información relevante del arma.
      */
     virtual void show_info() const = 0;
+
+    virtual int getDamage() = 0;
     
-    /**
-     * @brief Constructor protegido para evitar instanciar la interfaz directamente.
-     */
-    IArma(){}
-    
-public: 
+
     /**
      * @brief Indica si el arma es mágica.
      * @return true si el arma es mágica, false en caso contrario.

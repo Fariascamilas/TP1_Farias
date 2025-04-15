@@ -1,5 +1,8 @@
 #pragma once
 #include "Personaje.hpp"
+#include <vector>
+#include <string>
+#include <memory>
 
 /**
  * @brief Clase abstracta para personajes de tipo Mago.
@@ -7,17 +10,15 @@
 class Mago : public IPersonaje{
 protected:
     std::string name;               /**< Nombre del Mago */
-    std::array<IArma*,2> weapons;   /**< Armas disponibles */
+    std::vector<std::unique_ptr<IArma>> weapons;   /**< Armas disponibles */
     int magicLevel;                 /**< Nivel de magia */
     std::string specialHability;    /**< Habilidad especial */
-    
-public:
     int HP;                         /**< Puntos de vida */
-    
+public:    
     /**
      * @brief Destructor que libera los punteros en el arreglo de armas.
      */
-    virtual ~Mago();
+    virtual ~Mago() = default;
 
     /**
      * @param _name Nombre del mago.
@@ -26,7 +27,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _HP Puntos de vida.
      */
-    Mago(std::string _name, const std::array<IArma*,2>& _weapons, int _magicLevel, std::string _specialHability, int _HP);
+    Mago(std::string _name, std::vector<std::unique_ptr<IArma>> _weapons, int _magicLevel, std::string _specialHability, int _HP);
 
     /**
      * @brief Muestra información detallada del mago.
@@ -37,23 +38,27 @@ public:
      */
     virtual void show_info() const = 0;
 
+    void decreaseHP(int damage) override;
+
+    bool isAlive() const override;
+
     /**
      * @brief Realiza un golpe fuerte contra otro personaje.
      * @param other Referencia al oponente.
      */
-    void golpeFuerte(IPersonaje &other) override;
+    int golpeFuerte(int posWeapon) override;
            
     /**
      * @brief Realiza un golpe rápido contra otro personaje.
      * @param other Referencia al oponente.
      */ 
-    void golpeRapido(IPersonaje &other) override; 
+    int golpeRapido(int posWeapon) override; 
           
     /**
      * @brief Se defiende y da un golpe.
      * @param other Referencia al oponente.
      */
-    void defensaGolpe(IPersonaje &other) override;
+    int defensaGolpe(int posWeapon) override;
 
     /**
      * @brief Obtiene el nombre del mago.
@@ -71,7 +76,7 @@ public:
      * @brief Devuelve las armas del guerrero.
      * @return Referencia constante al arreglo de punteros a IArma.
      */
-    const std::array<IArma*,2>& getWeapons() const;
+    const std::vector<std::unique_ptr<IArma>>& getWeapons() const override;
         
     /**
      * @brief Devuelve el nivel de magia.
@@ -103,7 +108,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Hechicero(std::string _name, std::string specialHability, const std::array<IArma*,2>& weapons);
+    Hechicero(std::string _name, std::string specialHability, std::vector<std::unique_ptr<IArma>> weapons);
      
     /**
      * @brief Muestra la información del Hchicero.
@@ -125,7 +130,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Conjurador(std::string _name, std::string specialHability, const std::array<IArma*,2>& weapons);
+    Conjurador(std::string _name, std::string specialHability, std::vector<std::unique_ptr<IArma>> weapons);
      
     /**
      * @brief Muestra la información del Conjurador.
@@ -147,7 +152,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Brujo(std::string _name, std::string specialHability, const std::array<IArma*,2>& weapons);
+    Brujo(std::string _name, std::string specialHability, std::vector<std::unique_ptr<IArma>> weapons);
      
     /**
      * @brief Muestra la información del Brujo.
@@ -169,7 +174,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Nigromante(std::string _name, std::string specialHability, const std::array<IArma*,2>& weapons);
+    Nigromante(std::string _name, std::string specialHability, std::vector<std::unique_ptr<IArma>> weapons);
      
     /**
      * @brief Muestra la información del Nigromante.

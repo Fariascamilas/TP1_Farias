@@ -1,7 +1,7 @@
 #pragma once
-#include <array>
-#include <string>
 #include "../Arma/Arma.hpp"
+#include <vector>
+#include <memory>
 
 enum magicLevels {APPRENTICE, SORCERER, MASTER};
 enum experienceLevels{RECRUIT, CAPITAIN, LEYEND};
@@ -19,7 +19,6 @@ public:
      * @brief Destructor virtual por defecto.
      */
     virtual ~IPersonaje() = default;
-protected:
     /**
      * @brief Constructor protegido para evitar instanciar la interfaz directamente.
      */
@@ -30,9 +29,15 @@ protected:
      */
     virtual void show_info() const = 0;
 
-    virtual void golpeFuerte(IPersonaje &other) = 0;
+    virtual void decreaseHP(int damage) = 0;
+
+    virtual bool isAlive() const = 0;
+
+    virtual const std::vector<std::unique_ptr<IArma>>& getWeapons() const = 0;
+
+    virtual int golpeFuerte(int posWeapon) = 0;
     
-    virtual void golpeRapido(IPersonaje &other) = 0;
+    virtual int golpeRapido(int posWeapon) = 0;
     
-    virtual void defensaGolpe(IPersonaje &other) = 0;
+    virtual int defensaGolpe(int posWeapon) = 0;
 };

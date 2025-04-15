@@ -1,5 +1,8 @@
 #pragma once
 #include "Personaje.hpp"
+#include <vector>
+#include <string>
+#include <memory>
 
 /**
  * @brief Clase abstracta para personajes de tipo Guerrero.
@@ -7,17 +10,15 @@
 class Guerrero : public IPersonaje{
 protected:
     std::string name;               /**< Nombre del guerrero */
-    std::array<IArma*,2> weapons;   /**< Armas disponibles */
+    std::vector<std::unique_ptr<IArma>> weapons;   /**< Armas disponibles */
     int experienceLevel;            /**< Nivel de experiencia */
     std::string specialHability;    /**< Habilidad especial */
-    
-public:
     int HP;                         /**< Puntos de vida */
- 
+public:
     /**
      * @brief Destructor que libera los punteros en el arreglo de armas.
      */
-    virtual ~Guerrero();
+    virtual ~Guerrero() = default;
 
     /**
      * @brief Constructor principal para Guerrero.
@@ -27,30 +28,34 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _HP Puntos de vida.
      */
-    Guerrero(std::string _name, const std::array<IArma*,2>& _weapons, int _experienceLevel, std::string _specialHability, int _HP);
+    Guerrero(std::string _name, std::vector<std::unique_ptr<IArma>> _weapons, int _experienceLevel, std::string _specialHability, int _HP);
 
     /**
      * @brief Muestra información específica del guerrero.
      */
     virtual void show_info() const = 0;
 
+    void decreaseHP(int damage) override;
+
+    bool isAlive() const override;
+
     /**
      * @brief Realiza un golpe fuerte contra otro personaje.
      * @param other Referencia al oponente.
      */
-    void golpeFuerte(IPersonaje &other) override;
+    int golpeFuerte(int posWeapon) override;
        
     /**
      * @brief Realiza un golpe rápido contra otro personaje.
      * @param other Referencia al oponente.
      */ 
-    void golpeRapido(IPersonaje &other) override;
+    int golpeRapido(int posWeapon) override;
         
     /**
      * @brief Se defiende y da un golpe.
      * @param other Referencia al oponente.
      */
-    void defensaGolpe(IPersonaje &other) override;
+    int defensaGolpe(int posWeapon) override;
 
     /**
      * @brief Obtiene el nombre del guerrero.
@@ -68,8 +73,8 @@ public:
      * @brief Devuelve las armas del guerrero.
      * @return Arreglo de punteros a IArma.
      */
-    const std::array<IArma*,2>& getWeapons() const; // VER SI TRAE PROBLEMAS, SI HACE UNA COPIA PODRIA TENER MUCHOS PUNTEROS
-        
+    const std::vector<std::unique_ptr<IArma>>& getWeapons() const override; 
+
     /**
      * @brief Devuelve el nivel de experiencia.
      * @return Nivel de experiencia.
@@ -100,7 +105,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Barbaro(std::string _name, std::string _specialHability, const std::array<IArma*,2>& _weapons);
+    Barbaro(std::string _name, std::string _specialHability, std::vector<std::unique_ptr<IArma>> _weapons);
     
     /**
      * @brief Muestra la información del Bárbaro.
@@ -122,7 +127,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Paladin(std::string _name, std::string _specialHability, const std::array<IArma*,2>& _weapons);
+    Paladin(std::string _name, std::string _specialHability, std::vector<std::unique_ptr<IArma>> _weapons);
     
     /**
      * @brief Muestra la información del Paladín.
@@ -144,7 +149,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Caballero(std::string _name, std::string _specialHability, const std::array<IArma*,2>& _weapons);
+    Caballero(std::string _name, std::string _specialHability, std::vector<std::unique_ptr<IArma>> _weapons);
     
     /**
      * @brief Muestra la información del Caballero.
@@ -169,7 +174,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Mercenario(std::string _name, std::string _specialHability, const std::array<IArma*,2>& _weapons);
+    Mercenario(std::string _name, std::string _specialHability, std::vector<std::unique_ptr<IArma>> _weapons);
     
     /**
      * @brief Muestra la información del Mercenario.
@@ -194,7 +199,7 @@ public:
      * @param _specialHability Habilidad especial.
      * @param _weapons Arreglo de armas.
      */
-    Gladiador(std::string _name, std::string _specialHability, const std::array<IArma*,2>& _weapons);
+    Gladiador(std::string _name, std::string _specialHability, std::vector<std::unique_ptr<IArma>> _weapons);
     
     /**
      * @brief Muestra la información del Gladiador.

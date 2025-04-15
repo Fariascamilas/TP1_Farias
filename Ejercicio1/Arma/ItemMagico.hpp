@@ -7,11 +7,6 @@
  * Clase abstracta para Items Mágicos que implementa la interfaz IArma.
  */
 class ItemMagico : public IArma{
-public:
-        /**
-     * @brief Destructor virtual por defecto
-     */
-    virtual ~ItemMagico() = default;
 protected:
     std::string name;       /**< Nombre del arma */
     int timesUsed;          /**< Veces usada (el daño se reduce con el aumento de timesUsed)*/
@@ -28,6 +23,11 @@ protected:
      * @param _provenance Lugar mágico del que proviene
      */
     ItemMagico(std::string _name, int _timesUsed, std::string _oddity, int _powerLevel, int _provenance);
+public:
+    /**
+     * @brief Destructor virtual por defecto
+     */
+    virtual ~ItemMagico() = default;
 
     /**
      * @brief Incrementa en 1 las veces usadas

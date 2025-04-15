@@ -1,47 +1,55 @@
 #include "Guerrero.hpp"
 #include "Mago.hpp"
+#include "../Arma/ItemMagico.hpp"
+#include "../Arma/ArmaDeCombate.hpp"
 #include <iostream>
 using namespace std;
 
-Guerrero::Guerrero(string _name, const std::array<IArma*,2>& _weapons, int _experienceLevel, string _specialHability, int _HP) : name(_name), weapons(_weapons), experienceLevel(_experienceLevel), specialHability(_specialHability), HP(_HP) {
+Guerrero::Guerrero(string _name, vector<unique_ptr<IArma>> _weapons, int _experienceLevel, string _specialHability, int _HP) : name(_name), weapons(move(_weapons)), experienceLevel(_experienceLevel), specialHability(_specialHability), HP(_HP) {
     if (_HP < 0) {throw invalid_argument("HP inválido");}
     if (_experienceLevel < RECRUIT || _experienceLevel > LEYEND) {throw invalid_argument("Nivel de experiencia inválido");}
 }
 
-Guerrero::~Guerrero(){
-    for (auto weapon : weapons) {
-        if(weapon){delete weapon;}
-    }
+void Guerrero::decreaseHP(int damage){
+    HP -= damage;
 }
 
-void Guerrero::golpeFuerte(IPersonaje &other) {
-    if(other.isMagical()){
-        Mago* otherM = dynamic_cast<Mago*>(&other);
-        otherM->HP -= 10;
-        return;
-    }
-    Guerrero* otherG = dynamic_cast<Guerrero*>(&other);
-    otherG->HP -= 10;
+bool Guerrero::isAlive() const {
+    if(HP>0){return true;}
+    return false;
 }
 
-void Guerrero::golpeRapido(IPersonaje &other) {
-    if(other.isMagical()){
-        Mago* otherM = dynamic_cast<Mago*>(&other);
-        otherM->HP -= 10;
-        return;
+int Guerrero::golpeFuerte(int posWeapon) {
+    if(posWeapon < 0){
+        throw invalid_argument("Posición inválida");
     }
-    Guerrero* otherG = dynamic_cast<Guerrero*>(&other);
-    otherG->HP -= 10;
+    if(weapons[posWeapon]){
+        weapons[posWeapon]->use();
+        return weapons[posWeapon]->getDamage()+10;
+    }
+    return 10;
 }
 
-void Guerrero::defensaGolpe(IPersonaje &other) {
-    if(other.isMagical()){
-        Mago* otherM = dynamic_cast<Mago*>(&other);
-        otherM->HP -= 10;
-        return;
+int Guerrero::golpeRapido(int posWeapon) {
+    if(posWeapon < 0){
+        throw invalid_argument("Posición inválida");
     }
-    Guerrero* otherG = dynamic_cast<Guerrero*>(&other);
-    otherG->HP -= 10;
+    if(weapons[posWeapon]){
+        weapons[posWeapon]->use();
+        return weapons[posWeapon]->getDamage()+10;
+    }
+    return 10;
+}
+
+int Guerrero::defensaGolpe(int posWeapon) {
+    if(posWeapon < 0){
+        throw invalid_argument("Posición inválida");
+    }
+    if(weapons[posWeapon]){
+        weapons[posWeapon]->use();
+        return weapons[posWeapon]->getDamage()+10;
+    }
+    return 10;
 }
 
 string Guerrero::getName() const{
@@ -52,7 +60,7 @@ bool Guerrero::isMagical() {
     return false;
 }
 
-const std::array<IArma*,2>& Guerrero::getWeapons() const{
+const vector<unique_ptr<IArma>>& Guerrero::getWeapons() const{
     return weapons;
 }
 
@@ -69,10 +77,12 @@ int Guerrero::getHP() const{
 }
 
 //----------------------------------------------------------------------
-Barbaro::Barbaro(string _name, string _specialHability, const std::array<IArma*,2>& _weapons) : Guerrero(_name, _weapons, CAPITAIN, _specialHability, 100){}
+Barbaro::Barbaro(string _name, string _specialHability, vector<unique_ptr<IArma>> _weapons) : Guerrero(_name,  move(_weapons), CAPITAIN, _specialHability, 100){}
 
 void Barbaro::show_info() const{
     cout<<"=== [Barbaro \U0001F9DD\u200D] ==="<<endl
+    << "Nombre: " <<name<<endl
+    << "Habilidad Especial: " <<specialHability<<endl
     << "\u2694 Nivel de experiencia: Capitain" <<endl
     << "\u2764 HP: " <<HP<<endl;
 }
@@ -82,10 +92,12 @@ string Barbaro::unstoppableFurySaying(){
 }
 
 //----------------------------------------------------------------------
-Paladin::Paladin(string _name, string _specialHability, const std::array<IArma*,2>& _weapons) : Guerrero(_name, _weapons, RECRUIT, _specialHability, 100){}
+Paladin::Paladin(string _name, string _specialHability, vector<unique_ptr<IArma>> _weapons) : Guerrero(_name,  move(_weapons), RECRUIT, _specialHability, 100){}
 
 void Paladin::show_info() const{
     cout<<"=== [Paladin \U0001F9DD\u200D] ==="<<endl
+    << "Nombre: " <<name<<endl
+    << "Habilidad Especial: " <<specialHability<<endl
     << "\u2694 Nivel de experiencia: Recruit" <<endl
     << "\u2764 HP: " <<HP<<endl;
 }
@@ -95,10 +107,12 @@ string Paladin::lightPrevailsSaying(){
 }
 
 //----------------------------------------------------------------------
-Caballero::Caballero(string _name, string _specialHability, const std::array<IArma*,2>& _weapons) : Guerrero(_name, _weapons, CAPITAIN, _specialHability, 100){}
+Caballero::Caballero(string _name, string _specialHability, vector<unique_ptr<IArma>> _weapons) : Guerrero(_name,  move(_weapons), CAPITAIN, _specialHability, 100){}
 
 void Caballero::show_info() const{
     cout<<"=== [Caballero \U0001F9DD\u200D] ==="<<endl
+    << "Nombre: " <<name<<endl
+    << "Habilidad Especial: " <<specialHability<<endl
     << "\u2694 Nivel de experiencia: Capitain" <<endl
     << "\u2764 HP: " <<HP<<endl;
 }
@@ -108,10 +122,12 @@ string Caballero::aNobleEndSaying(){
 }
 
 //----------------------------------------------------------------------
-Mercenario::Mercenario(string _name, string _specialHability, const std::array<IArma*,2>& _weapons) : Guerrero(_name, _weapons, LEYEND, _specialHability, 100){}
+Mercenario::Mercenario(string _name, string _specialHability, vector<unique_ptr<IArma>> _weapons) : Guerrero(_name,  move(_weapons), LEYEND, _specialHability, 100){}
 
 void Mercenario::show_info() const{
     cout<<"=== [Mercenario \U0001F9DD\u200D] ==="<<endl
+    << "Nombre: " <<name<<endl
+    << "Habilidad Especial: " <<specialHability<<endl
     << "\u2694 Nivel de experiencia: Leyend" <<endl
     << "\u2764 HP: " <<HP<<endl;
 }
@@ -121,10 +137,12 @@ string Mercenario::dealClosedSaying(){
 }
 
 //----------------------------------------------------------------------
-Gladiador::Gladiador(string _name, string _specialHability, const std::array<IArma*,2>& _weapons) : Guerrero(_name, _weapons, LEYEND, _specialHability, 100) {}
+Gladiador::Gladiador(string _name, string _specialHability, vector<unique_ptr<IArma>> _weapons) : Guerrero(_name,  move(_weapons), LEYEND, _specialHability, 100) {}
 
 void Gladiador::show_info() const{
     cout<<"=== [Gladiador \U0001F9DD\u200D] ==="<<endl
+    << "Nombre: " <<name<<endl
+    << "Habilidad Especial: " <<specialHability<<endl
     << "\u2694 Nivel de experiencia: Leyend" <<endl
     << "\u2764 HP: " <<HP<<endl;
 }
