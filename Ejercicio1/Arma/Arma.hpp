@@ -39,8 +39,11 @@ public:
      */
     virtual void show_info() const = 0;
 
+    /**
+     * @brief Obtiene el daño producido por el arma.
+     * @return Valor entero que representa el daño del arma.
+     */
     virtual int getDamage() = 0;
-    
 
     /**
      * @brief Indica si el arma es mágica.

@@ -9,11 +9,11 @@
  */
 class Guerrero : public IPersonaje{
 protected:
-    std::string name;               /**< Nombre del guerrero */
-    std::vector<std::unique_ptr<IArma>> weapons;   /**< Armas disponibles */
-    int experienceLevel;            /**< Nivel de experiencia */
-    std::string specialHability;    /**< Habilidad especial */
-    int HP;                         /**< Puntos de vida */
+    std::string name;                               /**< Nombre del guerrero */
+    std::vector<std::unique_ptr<IArma>> weapons;    /**< Armas disponibles */
+    int experienceLevel;                            /**< Nivel de experiencia */
+    std::string specialHability;                    /**< Habilidad especial */
+    int HP;                                         /**< Puntos de vida */
 public:
     /**
      * @brief Destructor que libera los punteros en el arreglo de armas.
@@ -35,25 +35,36 @@ public:
      */
     virtual void show_info() const = 0;
 
+    /**
+     * @brief Decrementa el HP segun el daño causado por su oponente.
+     * @param damage Puntos a restar de HP (daño causado).
+     */
     void decreaseHP(int damage) override;
 
+    /**
+     * @brief Verifica si un personaje esta vivo (HP>0).
+     * @return Devuelve true si lo está, false caso contrario.
+     */
     bool isAlive() const override;
 
     /**
      * @brief Realiza un golpe fuerte contra otro personaje.
-     * @param other Referencia al oponente.
+     * @param posWeapon Posicion del arma a utilizar en el vector de armas.
+     * @return Devuelve el daño total que realiza el arma con un golpe fuerte.
      */
     int golpeFuerte(int posWeapon) override;
-       
+           
     /**
      * @brief Realiza un golpe rápido contra otro personaje.
-     * @param other Referencia al oponente.
+     * @param posWeapon Posicion del arma a utilizar en el vector de armas.
+     * @return Devuelve el daño total que realiza el arma con un golpe rápido.
      */ 
     int golpeRapido(int posWeapon) override;
-        
+          
     /**
      * @brief Se defiende y da un golpe.
-     * @param other Referencia al oponente.
+     * @param posWeapon Posicion del arma a utilizar en el vector de armas.
+     * @return Devuelve el daño total que realiza el arma con defensa y golpe.
      */
     int defensaGolpe(int posWeapon) override;
 
