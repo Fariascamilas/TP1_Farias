@@ -47,7 +47,7 @@ public:
     
     /**
      * @brief Calcula el daño en base al nivel de poder,
-     *        material y veces usadas. Reinicia timesUsed si el daño resulta <= 0.
+     * material y veces usadas. Reinicia timesUsed si el daño resulta <= 0.
      * @return Cantidad de daño producido
      */
     virtual int getDamage();

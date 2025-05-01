@@ -119,7 +119,7 @@ public:
     Hechicero(std::string _name, std::string specialHability, std::vector<std::unique_ptr<IArma>> weapons);
      
     /**
-     * @brief Muestra la información del Hchicero.
+     * @brief Muestra la información del Hechicero.
      */
     void show_info() const override;
     

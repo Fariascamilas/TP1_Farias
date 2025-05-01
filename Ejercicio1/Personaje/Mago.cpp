@@ -39,33 +39,6 @@ int Mago::golpeRapido(int posWeapon) {
         return weapons[posWeapon]->getDamage()+10;
     }
     return 10;
-    
-    /*if(auto enemy = dynamic_cast<Guerrero*>(other.get())){ 
-        if(auto w = dynamic_cast<ItemMagico*>(other.get())){
-            enemy->HP -= (10 + w->getDamage());
-            delete enemy;
-            delete w;
-            return;
-        }
-        auto w = dynamic_cast<ArmaDeCombate*>(other.get());
-        enemy->HP -= (10 + w->getDamage()); 
-        delete enemy;
-        delete w;
-        return;// No debo hacer delete porque es un puntero temporal, no quiero borrar el dato
-    }
-    auto enemy = dynamic_cast<Mago*>(other.get());
-    if(auto w = dynamic_cast<ItemMagico*>(other.get())){
-        enemy->HP -= (10 + w->getDamage());
-        delete enemy;
-        delete w;
-        return;
-    }
-    auto w = dynamic_cast<ArmaDeCombate*>(other.get());
-    enemy->HP -= (10 + w->getDamage()); 
-    enemy->HP -= 10;
-    delete enemy;
-    delete w;
-    return;*/
 }
 
 int Mago::defensaGolpe(int posWeapon) {
